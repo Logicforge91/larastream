@@ -38,7 +38,8 @@ use App\Http\Controllers\GuestController;
 Route::get('/', [StreamController::class, 'index']);
 Route::get('/stream/{id}', [StreamController::class, 'show']);
 Route::post('/stream', [StreamController::class, 'store']);
-Route::post('/upload-video', [StreamController::class, 'uploadVideo']);
+Route::post('/stream/{stream}/upload-video', [StreamController::class, 'uploadVideo'])->name('stream.uploadVideo');
+
 
 # Guest join
 Route::get('/guest/join/{uuid}', [GuestController::class, 'join']);

@@ -31,6 +31,26 @@
                     </form>
                 @endif
             </div>
+
+            {{-- Video Upload Form --}}
+            <div style="margin-top:10px;">
+                <form action="{{ route('stream.uploadVideo', $stream->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="file" name="video" accept="video/*" required>
+                    <button type="submit" style="padding:6px 12px; border:none; border-radius:5px; background-color:#28a745; color:white; cursor:pointer;">
+                        Upload Video
+                    </button>
+                </form>
+
+                @if($stream->videos->count() > 0)
+                    <small>Uploaded Videos:</small>
+                    <ul>
+                        @foreach($stream->videos as $video)
+                            <li>{{ $video->title }}</li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
         </div>
     @endforeach
 
@@ -58,13 +78,10 @@ h1, h2 { color: #222; margin-bottom: 15px; }
 .stream-item {
     background-color: #fff;
     padding: 12px 16px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     transition: transform 0.2s, box-shadow 0.2s;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
 .stream-item:hover {
     transform: translateY(-2px);
@@ -82,17 +99,18 @@ h1, h2 { color: #222; margin-bottom: 15px; }
 .stream-date { font-size: 12px; color: #555; margin-left: 8px; }
 form {
     background-color: #fff;
-    padding: 20px;
+    padding: 15px;
     border-radius: 8px;
     max-width: 400px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    margin-top: 20px;
+    margin-top: 10px;
 }
 form input[type="text"],
-form input[type="datetime-local"] {
+form input[type="datetime-local"],
+form input[type="file"] {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 12px;
+    padding: 8px;
+    margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 6px;
     box-sizing: border-box;
@@ -101,11 +119,11 @@ form input[type="datetime-local"] {
 form button {
     background-color: #28a745;
     color: #fff;
-    padding: 10px 16px;
+    padding: 8px 12px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
     transition: background-color 0.2s;
 }
 form button:hover { background-color: #218838; }

@@ -28,23 +28,19 @@ class StreamController extends Controller
         return redirect('/stream/' . $stream->id);
     }
 
-    public function uploadVideo(Request $request) {
-        $request->validate([
-            'stream_id' => 'required|exists:streams,id',
-            'video' => 'required|mimes:mp4,mov,webm|max:20000'
-        ]);
+   public function uploadVideo(Request $request, Stream $stream) {
+    $request->validate(['video' => 'required|mimes:mp4,webm,mov|max:51200']);
+    $file = $request->file('video');
+    $filename = time().'_'.$file->getClientOriginalName();
+    $file->storeAs('public/uploads', $filename);
 
-        $file = $request->file('video');
-        $filename = time().'_'.$file->getClientOriginalName();
-        $file->move(public_path('uploads'), $filename);
+    $stream->videos()->create([
+        'title' => $file->getClientOriginalName(),
+        'filename' => $filename
+    ]);
 
-        Video::create([
-            'stream_id' => $request->stream_id,
-            'filename' => $filename,
-            'title' => $request->title ?? 'Untitled'
-        ]);
+    return redirect()->back()->with('success','Video uploaded successfully!');
+}
 
-        return back();
-    }
 }
 
