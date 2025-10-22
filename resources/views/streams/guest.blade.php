@@ -1,4 +1,9 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guest: {{ $guest->name }}</title>
 <style>
 body {
     font-family: Arial, sans-serif;
@@ -7,14 +12,28 @@ body {
     margin: 20px;
 }
 h1 { font-size: 28px; margin-bottom: 20px; }
-video { border-radius: 8px; background-color: #000; object-fit: cover; border: 2px solid #ddd; margin-bottom: 10px; }
-#videos { display: flex; gap: 15px; flex-wrap: wrap; }
-#hostVideo, #localVideo { width: 320px; height: 240px; }
+#videos {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+video {
+    border-radius: 8px;
+    background-color: #000;
+    object-fit: cover;
+    border: 2px solid #ddd;
+    margin-bottom: 10px;
+}
+#hostVideo, #localVideo {
+    width: 320px;
+    height: 240px;
+}
 @media(max-width:768px){
     #hostVideo, #localVideo { width: 100%; height: auto; }
 }
 </style>
-
+</head>
+<body>
 
 <h1>Guest: {{ $guest->name }}</h1>
 
@@ -24,12 +43,12 @@ video { border-radius: 8px; background-color: #000; object-fit: cover; border: 2
 </div>
 
 <script>
-const streamId = "{{ $stream->id }}"; // wrapped in quotes
+const streamId = "{{ $stream->id }}";
 const guestUUID = '{{ $guest->uuid }}';
 
 let localStream, pc;
 
-// Helper to send signals to backend
+// Helper to send signals
 async function sendSignal(payload){
     try{
         const res = await fetch('/api/webrtc/send',{
@@ -37,18 +56,14 @@ async function sendSignal(payload){
             headers:{'Content-Type':'application/json'},
             body: JSON.stringify(payload)
         });
-        if(!res.ok){
-            console.error('Signal send error', await res.text());
-        }
-    } catch(e){
-        console.error('Signal send exception', e);
-    }
+        if(!res.ok) console.error('Signal send error', await res.text());
+    } catch(e){ console.error('Signal send exception', e); }
 }
 
 // Initialize guest
 async function initGuest() {
     try {
-        // Get camera and mic
+        // Access camera and mic
         localStream = await navigator.mediaDevices.getUserMedia({ video:true, audio:true });
         document.getElementById('localVideo').srcObject = localStream;
 
@@ -75,20 +90,17 @@ async function initGuest() {
             }
         };
 
-        // Poll host offers every second
+        // Poll host offers every 1s
         setInterval(async ()=>{
             try {
                 const res = await fetch(`/api/webrtc/receive/${streamId}/guest`);
                 const signals = await res.json();
 
                 for(let signal of signals){
-                    // Only process signals for this guest
                     if(signal.data.guest !== guestUUID) continue;
 
                     if(signal.data.type === 'offer'){
                         await pc.setRemoteDescription({ type:'offer', sdp: signal.data.sdp });
-
-                        // Create answer
                         const answer = await pc.createAnswer();
                         await pc.setLocalDescription(answer);
 
@@ -99,12 +111,10 @@ async function initGuest() {
                             data:{ type:'answer', sdp: answer.sdp, guest:guestUUID }
                         });
                     } else if(signal.data.type === 'ice'){
-                        pc.addIceCandidate(signal.data.candidate).catch(e=>console.error("ICE add error:", e));
+                        pc.addIceCandidate(signal.data.candidate).catch(e=>console.error("ICE error:", e));
                     }
                 }
-            } catch(e){
-                console.error("Polling error:", e);
-            }
+            } catch(e){ console.error("Polling error:", e); }
         }, 1000);
 
     } catch(e){
@@ -115,4 +125,5 @@ async function initGuest() {
 
 initGuest();
 </script>
-
+</body>
+</html>

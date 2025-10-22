@@ -44,10 +44,7 @@ Route::post('/upload-video', [StreamController::class, 'uploadVideo']);
 Route::get('/guest/join/{uuid}', [GuestController::class, 'join']);
 
 Route::post('/guest/create', [GuestController::class, 'create'])->name('guest.create');
+Route::get('/guest/{uuid}', [GuestController::class, 'show'])->name('guest.show');
 
-use App\Http\Controllers\WebrtcController;
 
-
-Route::post('/webrtc/send', [WebrtcController::class, 'send']);
-Route::get('/webrtc/receive/{stream}/{type}', [WebrtcController::class, 'receive']);
 
