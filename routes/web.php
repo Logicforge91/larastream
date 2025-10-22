@@ -48,4 +48,5 @@ use App\Http\Controllers\WebrtcController;
 
 
 Route::post('/webrtc/send', [WebrtcController::class, 'send']);
-Route::get('/webrtc/receive/{stream_id}/{receiver_type}', [WebrtcController::class, 'receive']);
+Route::get('/webrtc/receive/{stream}/{type}', [WebrtcController::class, 'receive']);
+

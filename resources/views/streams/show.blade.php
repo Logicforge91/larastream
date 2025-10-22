@@ -167,3 +167,111 @@ setInterval(async ()=>{
 
 initCameras();
 </script>
+<style>
+/* General page styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 20px;
+}
+
+h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+h3 {
+    font-size: 20px;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+/* Camera selection area */
+select {
+    padding: 6px 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+button {
+    padding: 6px 12px;
+    margin-right: 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Video containers */
+video {
+    border-radius: 8px;
+    background-color: #000;
+    object-fit: cover;
+    border: 2px solid #ddd;
+}
+
+/* Cameras container */
+#camera1, #camera2 {
+    width: 320px;
+    height: 240px;
+}
+
+/* Flex container for cameras */
+div#camera1, div#camera2 {
+    margin-bottom: 15px;
+}
+
+/* Guest video grid */
+#guest-videos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+#guest-videos video {
+    width: 200px;
+    height: 150px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: #000;
+}
+
+/* Pre-recorded video section */
+#preVideo {
+    width: 320px;
+    height: 240px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 2px solid #007bff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #camera1, #camera2, #preVideo {
+        width: 100%;
+        height: auto;
+    }
+
+    #guest-videos video {
+        width: 48%;
+        height: auto;
+    }
+
+    select, button {
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+}
+</style>
