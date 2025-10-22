@@ -23,12 +23,12 @@
                 @if($stream->guests->count() > 0)
                     <a href="/guest/join/{{ $stream->guests->first()->uuid }}" class="btn-link">Join as Guest</a>
                 @else
-                    <form method="POST" action="/guest/create" style="display:inline">
+                    {{-- <form method="POST" action="/guest/create" style="display:inline">
                         @csrf
                         <input type="hidden" name="stream_id" value="{{ $stream->id }}">
                         <input type="hidden" name="name" value="Guest {{ rand(1000,9999) }}">
                         <button type="submit" class="btn-link">Create Guest</button>
-                    </form>
+                    </form> --}}
                 @endif
             </div>
         </div>
